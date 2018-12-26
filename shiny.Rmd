@@ -1,0 +1,64 @@
+---
+title: "Comarping ML algorithms by iris "
+author: "samado"
+date: "December 26, 2018"
+output: ioslides_presentation
+---
+***
+What is it?
+
+My web app is made for looking over the difference among
+ML alorithms
+
+- 7 algorithms
+- How different according to amount of train data set
+- The computation speed of algorithms
+- For thinking about the Prons & Cons of algorithms
+
+
+***
+How it was made?
+
+- I used the **caret** package for various Machine Learning algorithms
+- The machine learning code is below
+
+
+```r
+algName <- modelSet$algorithm[modelSet$name == input$models]
+index <- createDataPartition(iris$Species, list = F, p = input$prob / 100)
+set.seed(input$seeds)
+fit <- train(Species ~ ., method = algName, data = iris[index, ])
+result_iris$Predicted <- predict(fit, newdata = iris[, -5])
+```
+***
+Visualization for the result
+
+- I used the **ggvis** package for the visualization
+- The code is below
+
+
+```r
+result_iris %>% 
+ggvis(~Sepal.Length, ~Petal.Length, 
+fill = ~Predicted, opacity := 0.3, 
+shape = ~result, 
+size := 150) %>% 
+layer_points() %>% 
+add_legend("fill", title = "Type of the iris") %>% 
+add_legend("shape", orient = "left", title = "Predictions")
+```
+***
+The Outcomes
+
+- This app shows 3 outcomes
+ 1. You can see the plot of the predicted values through the algorithm you selected
+ 2. You can also see the comparison table of between original and predicted values
+ 3. You can analyze the result with the confusion matrix
+ 
+You can see here :
+https://samado11.shinyapps.io/shiny/
+
+***
+Thanks
+
+
